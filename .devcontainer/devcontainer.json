@@ -1,0 +1,59 @@
+{
+  "name": "glitchtip-backend",
+  "dockerComposeFile": "docker-compose.dev.yml",
+  "runServices": ["redis", "postgres"],
+  // "shutdownAction": "none",
+  "service": "web",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/va-h/devcontainers-features/uv:1": {},
+    "ghcr.io/dhoeric/features/hadolint:1": {},
+    "ghcr.io/devcontainers-extra/features/apt-get-packages:1": {
+      "packages": ["libjpeg-dev", "zlib1g-dev", "libpq-dev"]
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "charliermarsh.ruff",
+        "codezombiech.gitignore",
+        "eamodio.gitlens",
+        "exiasr.hadolint",
+        "kevinrose.vsc-python-indent",
+        "mosapride.zenkaku",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "oderwat.indent-rainbow",
+        "pkief.material-icon-theme",
+        "shardulm94.trailing-spaces",
+        "streetsidesoftware.code-spell-checker",
+        "yzhang.markdown-all-in-one"
+        // "njpwerner.autodocstring",
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/glitchtip-backend/.venv/bin/python",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+          },
+          "editor.formatOnSave": true
+        },
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        }
+      }
+    }
+  },
+  "forwardPorts": [
+    // 5432,
+  ],
+  "postCreateCommand": ".devcontainer/postCreateCommand.sh"
+  // "remoteUser": "root"
+}

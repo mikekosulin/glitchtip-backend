@@ -1,0 +1,48 @@
+x-environment: &default-environment
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+  SECRET_KEY: change_me
+  ENABLE_ORGANIZATION_CREATION: "true"
+  ENABLE_TEST_API: "true"
+  DEBUG: "true"
+  EMAIL_BACKEND: "django.core.mail.backends.console.EmailBackend"
+  ENABLE_OBSERVABILITY_API: "true"
+  #IS_LOAD_TEST: "true"
+  CELERY_WORKER_CONCURRENCY: 1
+  CELERY_WORKER_PREFETCH_MULTIPLIER: 25
+  CELERY_WORKER_POOL: "threads"
+  CELERY_SKIP_CHECKS: "false"
+  GLITCHTIP_VERSION: "local"
+
+x-depends_on: &default-depends_on
+  - redis
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    networks:
+      - glitchtip-dev
+
+  redis:
+    image: valkey/valkey:8
+    networks:
+      - glitchtip-dev
+
+  web:
+    image: mcr.microsoft.com/devcontainers/python:1-3.12-bookworm
+    command: sleep infinity
+    depends_on: *default-depends_on
+    environment: *default-environment
+    volumes:
+      - ../..:/workspaces:cached
+    ports:
+      - 8000:8000
+    networks:
+      - glitchtip-dev
+
+# run `docker network create glitchtip-dev`
+networks:
+  glitchtip-dev:
+    name: glitchtip-dev
+    external: true
